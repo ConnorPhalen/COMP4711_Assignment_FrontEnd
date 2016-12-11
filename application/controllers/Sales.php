@@ -11,7 +11,7 @@ class Sales extends Application
 	*
 	*/
 	public function index()
-	{
+	{                    
 		$this->data['pagebody'] = 'sales';
 		//the supplies
 		$supplies = $this->supplies->get_all();

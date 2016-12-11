@@ -13,6 +13,13 @@ class Receiving extends Application
     */
 	public function index()
 	{
+                $userrole = $this->session->userdata('userrole');
+                if ($userrole != 'admin') {
+                   
+                    $this->data['pagebody'] = 'authorization';
+                    $this->render();
+                    return;
+                }
 		$this->data['pagebody'] = 'receiving';
         //
 		$services = $this->services->get_all();
