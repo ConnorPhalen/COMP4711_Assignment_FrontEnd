@@ -15,20 +15,20 @@ class Sales extends Application
 		$this->data['pagebody'] = 'sales';
 		//the supplies
 		$supplies = $this->supplies->get_all();
+                $suppliesJSON = json_decode(json_encode($supplies), True);
 		//the stocks
 		$stocks = $this->stocks->get_all();
+                $stocksJSON = json_decode(json_encode($stocks), True);
 
 		//go through supplies
-		foreach ($supplies as $supply)
+		foreach ($suppliesJSON as $supply)
 		{
-                        $supply = json_decode(json_encode($supply), True);
 			//add supply info
 			$standalone[] = array('supply' => $supply['name'], 'description' => $supply['description'], 'price' => $supply['price'], 'link' => $supply['link']);
 		}
 		//go through services
-		foreach ($stocks as $stock)
+		foreach ($stocksJSON as $stock)
 		{
-                        $stock = json_decode(json_encode($stock), True);
 			//add service info
 			$bundle[] = array('service' => $stock['name'], 'description' => $stock['description'], 'price' => $stock['price']);
 		}
