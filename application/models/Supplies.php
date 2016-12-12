@@ -5,51 +5,33 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-class Supplies extends CI_Model {
+define('REST_SERVER', 'http://backend.local');  // the REST server host
+define('REST_PORT', $_SERVER['SERVER_PORT']);   // the port you are running the server on
 
-    // array that holds all of the data related to supplies
-    var $supplies = array(
-        array('id' => '1', 'name' => 'Fuel', 'description' => 'Military Grade Fuel for the F22.', 
-              'price' => 300, 'quantity' => 20000, 'src' => '', 'link' => 'product/1'),
-        array('id' => '2', 'name' => 'Oil', 'description' => 'Oil lubricant to ensure mechanical parts operate smoothly.',
-              'price' => 100, 'quantity' => 14100, 'src' => '', 'link' => 'product/2'),
-        array('id' => '3', 'name' => 'Missles', 'description' => 'AIM 120C Missles for Air-to-Air combat.', 
-              'price' => 400000, 'quantity' => 680, 'src' => 'assets/img/AIM-120_1.jpg', 'link' => 'product/3'),
-        array('id' => '4', 'name' => 'Ammo', 'description' => '20mm PGU-28A/B SAPHEI rounds for the F-22\'s M61A2 Cannon.', 
-              'price' => 250, 'quantity' => 53070, 'src' => 'assets/img/PGU-28A_1.jpg', 'link' => 'product/4'),
-        array('id' => '5', 'name' => 'Rivets', 'description' => 'Rivets for the inner frame of the F-22.', 
-              'price' => 350, 'quantity' => 542, 'src' => '', 'link' => 'product/5'),
-        array('id' => '6', 'name' => 'JDAM', 'description' => 'A cheap smart bomb for use in use in ground attacks.', 
-              'price' => 25000, 'quantity' => 756, 'src' => '', 'link' => 'product/6'),
-        array('id' => '7', 'name' => 'Wheel', 'description' => 'Wheels for the landing gear. Essential for landing.', 
-              'price' => 2400, 'quantity' => 230, 'src' => '', 'link' => 'product/7'),
-        array('id' => '8', 'name' => 'Windshield', 'description' => 'Specially constructed glass for the cockpit.', 
-              'price' => 80000, 'quantity' => 5, 'src' => '', 'link' => 'product/8')
-        );
+class Supplies extends CI_Model {
 
     // Default Constructor
     public function __construct()
     {
             parent::__construct();
+		//*** Explicitly load the REST libraries. 
+		$this->load->library(['curl', 'format', 'rest']);
     }
 
     // Grab all of the supply data
     public function get_all()
     {
-        return $this->supplies;
+        $this->rest->initialize(array('server' => REST_SERVER));
+        $this->rest->option(CURLOPT_PORT, REST_PORT);
+        return $this->rest->get('/receiving');
     }
 
     // Get one supply item
-    public function get_one($id)
+    public function get_one($key, $key2 = null)
     {
-        // find the correct id, return it
-        foreach($this->supplies as $supply)
-        {
-            if($supply['id'] == $id)
-            {
-                return $supply;
-            }
-        }
+        $this->rest->initialize(array('server' => REST_SERVER));
+        $this->rest->option(CURLOPT_PORT, REST_PORT);
+        return $this->rest->get('/receiving/item/id/' . $key);
     }
     
     // Get the description of the supply
@@ -123,8 +105,16 @@ class Supplies extends CI_Model {
      * @param type $mode Add, Minus, or Equal
      * @param type $quantity Set the quantity of the Supply item
      */
-    public function set_quantity($name, $mode, $quantity)
+    public function set_quantity($id, $quantity)
     {
+        
+        
+        
+        
+        $result = $this->rest->put('/receiving/item/id/' . $key, $value);
+        echo($result);
+        
+        /*
         // find the correct supply name, set the quantity
         foreach($this->supplies as $supply)
         {
@@ -145,6 +135,7 @@ class Supplies extends CI_Model {
                 }
             }
         }
+         */
     }
   
 }

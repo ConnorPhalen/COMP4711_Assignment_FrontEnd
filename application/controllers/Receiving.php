@@ -13,41 +13,29 @@ class Receiving extends Application
     */
 	public function index()
 	{
-		$this->data['pagebody'] = 'receiving';
-        //
-		$services = $this->services->get_all();
-                $supplies = $this->supplies->get_all();
+            $this->data['pagebody'] = 'receiving';
+            // grabs all the data to display to the worker
+            $supplies = $this->supplies->get_all();
 
-        //go through supplies
-		foreach ($supplies as $supply)
-		{
-			//add supply info
-			$standalone[] = array('supply' => $supply['name']);
-		}
-
-		//go through services
-		foreach ($services as $service)
-		{
-			//add service info
-			$bundle[] = array('service' => $service['name']);
-		}
-		//add both supplies and services
-		$this->data['receiving'] = array(array('supplies' => $standalone, 'services' => $bundle));
-		$this->render();
+            //add both supplies and services
+            $this->data['receiving'] = array(array('supplies' => $supplies));
+            $this->render();
 	}
 
-	//receive service
-	public function receive()
+	//update supplies on the database
+	public function update()
 	{
-		//results returned from POST
-		$results = $this->input->post();
-
-		//go through results and add the quanity specified to the stocks
-		foreach ($results as $service)
-		{
-			$this->stocks->set_quantity($service['name'], "add", $service['quantity']);
-		}
-
-		//return message upon successful stocking
+            $this->rest->initialize(array('server' => 'http://backend.local'));
+            $this->rest->option(CURLOPT_PORT, REST_PORT);
+            
+            $selectedItems = $this->input->post("selectedItem");
+            
+            // I know this is bad code. I could do better if I knew more about PHP. :(
+            foreach($selectedItems as $yes)
+            {
+                $loc = key($selectedItems);
+                $curItem = array('id' => $loc, 'quantity' => $selectedItems[$loc]);
+                $result = $this->rest->put('/receiving/item/id/' . $loc, $curItem);
+            }
 	}
 }
