@@ -1,7 +1,8 @@
 <form>
     <body class="SalesBody">
-        <h1>Item List</h2>
+        <h2>Item List</h2>
         <p>Input the amount of items</p> 
+        <hr>
         {sales}        
         {supplies}
         <div class="listgroup" id="buttongroup">
@@ -19,6 +20,6 @@
         </div>
          {/supplies}
          {/sales}
-         <button type="submit" class="btn btn-primary">Submit</button>
+         <button type="submit" class="btn btn-primary pull-right">Submit</button>
     </body>
 </form>
