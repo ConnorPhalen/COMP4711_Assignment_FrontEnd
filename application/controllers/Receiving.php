@@ -13,9 +13,17 @@ class Receiving extends Application
     */
 	public function index()
 	{
-            $this->data['pagebody'] = 'receiving';
-            // grabs all the data to display to the worker
-            $supplies = $this->supplies->get_all();
+                $userrole = $this->session->userdata('userrole');
+                if ($userrole != 'admin') {
+                   
+                    $this->data['pagebody'] = 'authorization';
+                    $this->render();
+                    return;
+                }
+		$this->data['pagebody'] = 'receiving';
+        //
+		$services = $this->services->get_all();
+                $supplies = $this->supplies->get_all();
 
             //add both supplies and services
             $this->data['receiving'] = array(array('supplies' => $supplies));
