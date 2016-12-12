@@ -21,12 +21,14 @@ class Sales extends Application
 		//go through supplies
 		foreach ($supplies as $supply)
 		{
+                        $supply = json_decode(json_encode($supply), True);
 			//add supply info
 			$standalone[] = array('supply' => $supply['name'], 'description' => $supply['description'], 'price' => $supply['price'], 'link' => $supply['link']);
 		}
 		//go through services
 		foreach ($stocks as $stock)
 		{
+                        $stock = json_decode(json_encode($stock), True);
 			//add service info
 			$bundle[] = array('service' => $stock['name'], 'description' => $stock['description'], 'price' => $stock['price']);
 		}
